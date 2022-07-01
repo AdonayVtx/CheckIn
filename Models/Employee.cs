@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CheckIn.Models
 {
@@ -32,5 +33,8 @@ namespace CheckIn.Models
             }
         }
         public List<Attendance> Attendances { get; set; }
+        public List<Department> Departments { get; set; }
+        public List<Documentation> Documentations { get; set; }
+        public List<Vacation> Vacations { get; set; }
     }
 }

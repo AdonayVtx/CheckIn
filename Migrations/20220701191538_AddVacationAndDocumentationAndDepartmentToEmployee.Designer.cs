@@ -4,6 +4,7 @@ using CheckIn.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CheckIn.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220701191538_AddVacationAndDocumentationAndDepartmentToEmployee")]
+    partial class AddVacationAndDocumentationAndDepartmentToEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,15 +56,10 @@ namespace CheckIn.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Departments");
                 });
@@ -78,9 +75,6 @@ namespace CheckIn.Migrations
                     b.Property<string>("CURP")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("NSS")
                         .HasColumnType("nvarchar(max)");
 
@@ -88,8 +82,6 @@ namespace CheckIn.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Documentations");
                 });
@@ -108,8 +100,20 @@ namespace CheckIn.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DocumentationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EmployeeTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GenderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -120,7 +124,20 @@ namespace CheckIn.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("VacationId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("DocumentationId");
+
+                    b.HasIndex("EmployeeTypeId");
+
+                    b.HasIndex("GenderId");
+
+                    b.HasIndex("VacationId");
 
                     b.ToTable("Employees");
                 });
@@ -168,12 +185,7 @@ namespace CheckIn.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Vacations");
                 });
@@ -187,42 +199,63 @@ namespace CheckIn.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("CheckIn.Models.Department", b =>
-                {
-                    b.HasOne("CheckIn.Models.Employee", "Employee")
-                        .WithMany("Departments")
-                        .HasForeignKey("EmployeeId");
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("CheckIn.Models.Documentation", b =>
-                {
-                    b.HasOne("CheckIn.Models.Employee", "Employee")
-                        .WithMany("Documentations")
-                        .HasForeignKey("EmployeeId");
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("CheckIn.Models.Vacation", b =>
-                {
-                    b.HasOne("CheckIn.Models.Employee", "Employee")
-                        .WithMany("Vacations")
-                        .HasForeignKey("EmployeeId");
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("CheckIn.Models.Employee", b =>
                 {
-                    b.Navigation("Attendances");
+                    b.HasOne("CheckIn.Models.Department", "Departments")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId");
+
+                    b.HasOne("CheckIn.Models.Documentation", "Documentations")
+                        .WithMany("Employees")
+                        .HasForeignKey("DocumentationId");
+
+                    b.HasOne("CheckIn.Models.EmployeeType", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("EmployeeTypeId");
+
+                    b.HasOne("CheckIn.Models.Gender", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("GenderId");
+
+                    b.HasOne("CheckIn.Models.Vacation", "Vacations")
+                        .WithMany("Employees")
+                        .HasForeignKey("VacationId");
 
                     b.Navigation("Departments");
 
                     b.Navigation("Documentations");
 
                     b.Navigation("Vacations");
+                });
+
+            modelBuilder.Entity("CheckIn.Models.Department", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("CheckIn.Models.Documentation", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("CheckIn.Models.Employee", b =>
+                {
+                    b.Navigation("Attendances");
+                });
+
+            modelBuilder.Entity("CheckIn.Models.EmployeeType", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("CheckIn.Models.Gender", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("CheckIn.Models.Vacation", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

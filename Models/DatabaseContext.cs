@@ -13,5 +13,8 @@ namespace CheckIn.Models
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<EmployeeType> EmployeeTypes { get; set; }
         public DbSet<Gender> Genders { get; set; }
+        public DbSet<Vacation> Vacations { get; set; }
+        public DbSet<Documentation> Documentations { get; set; }
+        public DbSet<Department> Departments { get; set; }
     }
 }
